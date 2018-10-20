@@ -53,11 +53,11 @@ void conversao(){
     float parte_fracionaria;
 
     printf(">CONVERSAO\n");
-    printf("Digite um n˙mero decimal: ");
+    printf("Digite um n√∫mero decimal: ");
     scanf("%f",&decimal);
     printf("\n");
 
-    // divis„o do decimal em parte inteira e parte fracion·ria
+    // divis√£o do decimal em parte inteira e parte fracion√°ria
     parte_inteira = (int)decimal;
 
     parte_fracionaria = decimal-((int)decimal);
@@ -261,7 +261,7 @@ void equacao(){
 
 int main()
 {
-    // vari·vel para armazenar a escolha do usu·rio no menu
+    // vari√°vel para armazenar a escolha do usu√°rio no menu
     char escolha[2];
 
     // menu principal
@@ -276,12 +276,12 @@ int main()
     printf("\n");
     printf("Escolha uma opcao: ");
 
-    //recebendo a entrada do usu·rio e armazenando na vari·vel escolha
+    //recebendo a entrada do usu√°rio e armazenando na vari√°vel escolha
     gets(escolha);
     printf("\n");
 
-    //verificando se a entrada digitada pelo usu·rio È v·lida ou n„o e executando as funÁıes de acordo
-    // com a escolha do usu·rio, caso seja v·lida
+    //verificando se a entrada digitada pelo usu√°rio √© v√°lida ou n√£o e executando as fun√ß√µes de acordo
+    // com a escolha do usu√°rio, caso seja v√°lida
     if(strcmp(escolha,"c")==0 || strcmp(escolha,"C")==0){
 
         conversao();
