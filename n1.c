@@ -213,48 +213,175 @@ void lagrange(int grau,int coeficientes[]){
 
     Ls[3] = calcula_Ls(grau,coeficientes2);
 
-    //printf("\nLs: %f ; %f ; %f ; %f ",Ls[0],Ls[1],Ls[2],Ls[3]);
-
-    printf("\n Intervalo onde se encontram as raizes reais positivas:");
-    printf("\n %.6f <= X+ <= %.6f ",1/Ls[1],Ls[0]);
-    printf("\n\n Intervalo onde se encontram as raizes reais negativas:");
-    printf("\n %.6f <= X- <= %.6f ",Ls[2]*(-1),(-1/Ls[3]));
+    printf("\n  Intervalo onde se encontram as raizes reais positivas:");
+    printf("\n  %.6f <= X+ <= %.6f ",1/Ls[1],Ls[0]);
+    printf("\n\n  Intervalo onde se encontram as raizes reais negativas:");
+    printf("\n  %.6f <= X- <= %.6f ",Ls[2]*(-1),(-1/Ls[3]));
 
 }
 
+int bolzano(float a,float b,int coeficientes[],int grau){
+
+    float pa = 0;
+    float pb = 0;
+    int i;
+
+    for(i=grau;i>=0;i--){
+
+        pa = pa + ((float)coeficientes[i] * (float)pow(a,i));
+        pb = pb + ((float)coeficientes[i] * (float)pow(b,i));
+
+    }
+
+    if((pa*pb)<0){
+
+        return 1;
+
+    }
+    if((pa*pb)>0){
+
+        return 0;
+
+    }
+
+}
+
+void bissecao(float a, float b,int coeficientes[],int grau){
+
+    double pa,pb,pm,m,erro,a2,b2;
+    int i,j;
+
+    j=0;
+    a2 = a;
+    b2 = b;
+
+    erro = (double)(b2-a2)/(double)2;
+
+    while(j<1001 && erro>=pow(10,-8)){
+
+        pa = 0;
+        pb = 0;
+        pm = 0;
+        m = (b2+a2)/(double)2;
+        erro = (b2-a2)/(double)2;
+
+        for(i=grau;i>=0;i--){
+
+            pa = pa + ((double)coeficientes[i] * (double)pow(a2,i));
+            pb = pb + ((double)coeficientes[i] * (double)pow(b2,i));
+
+        }
+
+        for(i=grau;i>=0;i--){
+
+            pm = pm + ((double)coeficientes[i] * (double)pow(m,i));
+
+        }
+
+        if(pa*pm>0){
+            a2=m;
+        }
+        if(pa*pm<0){
+            b2=m;
+        }
+        if(pa*pm==0){
+            j = 10000;
+        }
+
+        j = j+1;
+
+    }
+
+    printf("\n\n Raiz aproximada do polinomio: %.30lf \n Valor do erro: %.30lf",m,erro);
+
+}
 
 void equacao(){
 
     int grau=1;
-    int i;
+    int i,j,contador;
+    float a,b;
 
-    printf("Digite o grau da equacao: ");
+    printf(" Digite o grau da equacao: ");
     scanf("%i",&grau);
 
     int coeficientes[grau+1];
 
     for(i=grau;i>=0;i--){
 
-        printf("\nDigite o coeficiente a%i: ",i);
+        printf("\n  Digite o coeficiente a%i: ",i);
         scanf("%i",&coeficientes[i]);
 
         if((i==grau) && (coeficientes[i]<=0)){
 
-            printf("\nCoeficiente an digitado eh menor que zero. Tente novamente com outro valor.\n");
+            printf("\n  ERRO: Coeficiente an digitado eh menor que zero. Tente novamente com outro valor.\n");
             i = grau + 1;
 
         }
 
         if((i==0) && (coeficientes[i]==0)){
 
-            printf("\nCoeficiente a0 digitado eh igual a zero. Tente novamente com outro valor.\n");
+            printf("\n  ERRO: Coeficiente a0 digitado eh igual a zero. Tente novamente com outro valor.\n");
             i = i + 1;
+
+        }
+
+        if(i==0){
+
+            contador = 0;
+
+            for(j=grau;j>=0;j--){
+
+                if(coeficientes[j]>=0){
+
+                    contador = contador + 1;
+
+                }
+
+            }
+
+            if(contador==grau+1){
+
+                printf("\n  ERRO: Todos os coeficientes digitados sao positivos. Necessario haver pelo menos um coeficiente negativo. Tente novamente com outros valores.\n");
+                i = grau+1;
+
+            }
 
         }
 
     }
 
+    // calculo dos limites das raízes usando o teorema de lagrange
+
+    printf("\n -> Teorema de Lagrange: \n");
+
     lagrange(grau,coeficientes);
+
+    //verificando se a quantidade de raízes é ímpar ou par usando o Teorema de Bolzano
+
+    printf("\n\n -> Teorema de Bolzano: \n");
+    printf("\n  Escolha um intervalo");
+    printf("\n\n   Digite o primeiro valor do intervalo: ");
+    scanf("%f",&a);
+    printf("   Digite o ultimo valor do intervalo: ");
+    scanf("%f",&b);
+
+    if(bolzano(a,b,coeficientes,grau)==0){
+
+        printf(" \n  O polinomio possui uma quantidade par de raizes reais no intervalo ]%f,%f[",a,b);
+
+    }
+    if(bolzano(a,b,coeficientes,grau)==1){
+
+        printf(" \n  O polinomio possui uma quantidade impar de raizes reais no intervalo ]%f,%f[",a,b);
+
+        printf("\n\n -> Metodo da Bissecao:");
+
+        bissecao(a,b,coeficientes,grau);
+
+    }
+
+
 
 }
 
